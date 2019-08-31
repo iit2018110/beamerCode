@@ -1,0 +1,149 @@
+\documentclass{beamer}
+\usetheme{AnnArbor}
+\usepackage{pgfplots, pgfplotstable}
+\usepackage{amsmath}
+
+\title{PROBABILITY and STATISTICS \\ BATCH B1 GROUP G2}
+\author{RAVI - IIT2018108 \\ MEGHNA - IIT2018109 \\ VIKASH - IIT2018110 \\ JISHAN -  IIT2018111 \\ AKHIL - IIT2018112}
+\institute{Indian Institute of Information Technology,Allahabad}
+\date{\today}
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Question 1}
+\large {A certain population consists of 20\% children, 30\% adolescents, and 50\% adults. The probabilities that a member of this population catches the flu are 0.45 for a child, 0.2 for an adolescent, and 0.15 for an adult.\\
+(a) What is the probability that a randomly selected member of this population has
+the flu?\\
+(b) What is the probability that a randomly selected person with the flu is an adult?}
+
+\end{frame}
+\begin{frame}{Solution}
+(a) Given: $P$(children)= 0.2 , $P$(adolescents)= 0.3 , $P$(adult)= 0.5 \\
+Also: $P$(flu \mid children)= 0.45 \\ \hspace{9mm} $P$(flu \mid adolescents)= 0.2 \\ \hspace{9mm} $P$(flu \mid adult)= 0.15 
+
+\vspace{2mm}\hspace{10mm}
+By Total Probability Theorem : \\
+\vspace{2mm}\hspace{10mm} $P$(E) = $\sum_{k=1}^{n} $P$(A_k)$P$(A\mid A_k)$ \\
+\vspace{2mm}\hspace{20mm}        = $P$(children)\times $P$(flu \mid children) +
+\\ \vspace{2mm}\hspace{20mm} $P$(adolescents)\times $P$(flu \mid adolescents) +
+\\ \vspace{2mm}\hspace{20mm} $P$(adult)\times $P$(flu \mid adult) \\
+\vspace{2mm}\hspace{10mm} = 0.2\times0.45 + 0.3\times0.2 + 0.5\times0.15\\
+\vspace{2mm}\hspace{10mm} = 0.09 + 0.06 + 0.075 \\
+\vspace{2mm}\hspace{10mm} = 0.225 \\
+\end{frame}
+
+\begin{frame}{Solution}
+\large{
+(b) So, by using Baye's theorem, we get:
+\vspace{2mm}\hspace{10mm}\\
+$P$(adult \mid flu) = \dfrac{$P$(flu \mid adult) \times $P$(adult)}{$P$(flu)}\\
+\vspace{2mm}\hspace{10mm}
+ = \dfrac{0.15\times0.5}{0.225}             \hspace{50mm}(from : part-a)\\
+\vspace{2mm}\hspace{10mm}
+So, $P$(adult \mid flu) = \frac{1}{3}\\}
+\end{frame}
+
+\begin{frame}{Question 2}
+\large {
+Let X be a discrete random variable with support S_X = \{0, 1, 2, 3, 4\}, P(\{X = 0\}) =
+P(\{X = 1\}) = \dfrac{1}{10} \\
+P(\{X = 2\}) = P(\{X = 3\}) = P(\{X = 4\}) = \dfrac{4}{15}.\\
+Find the distribution
+function of X and sketch its graph.}
+\end{frame}
+
+\begin{frame}{Solution}
+Given:- S_X = \{0, 1, 2, 3, 4\} , P(\{X = 0\}) =
+P(\{X = 1\}) = \dfrac{1}{10} \\
+P(\{X = 2\}) = P(\{X = 3\}) = P(\{X = 4\}) = \dfrac{4}{15}.\\
+\vspace{2mm}
+Now, distribution function is given by :\\
+\begin{equation*}
+    F_X(x) = \left\{\begin{array}{lr}
+        0 & \text{for } x < 0\\
+        \vspace{2mm}
+        \frac{1}{10} & \text{for } 0\leq x<1\\
+        \vspace{2mm}
+        \frac{1}{10} + \frac{1}{10} = \frac{1}{5} & \text{for } 1\leq x<2\\
+        \vspace{2mm}
+        \frac{1}{5} + \frac{4}{15} = \frac{7}{15}  & \text{for } 2\leq x<3\\
+        \vspace{2mm}
+        \frac{7}{15} + \frac{4}{15} = \frac{11}{15}  & \text{for } 3\leq x<4\\
+        \vspace{2mm}
+        \frac{11}{15} + \frac{4}{15} = 1  & \text{for } x \geq 4
+        \end{array}\right\}
+\end{equation*}
+\end{frame}
+
+\makeatletter
+\long\def\ifnodedefined#1#2#3{%
+    \@ifundefined{pgf@sh@ns@#1}{#3}{#2}%
+}
+
+\pgfplotsset{
+    discontinuous/.style={
+    scatter,
+    scatter/@pre marker code/.code={
+        \ifnodedefined{marker}{
+            \pgfpointdiff{\pgfpointanchor{marker}{center}}%
+             {\pgfpoint{0}{0}}%
+             \ifdim\pgf@y>0pt
+                \tikzset{options/.style={mark=*, fill=white}}
+                \draw [densely dashed] (marker-|0,0) -- (0,0);
+                \draw plot [mark=*] coordinates {(marker-|0,0)};
+             \else
+                \tikzset{options/.style={mark=none}}
+             \fi
+        }{
+            \tikzset{options/.style={mark=none}}        
+        }
+        \coordinate (marker) at (0,0);
+        \begin{scope}[options]
+    },
+    scatter/@post marker code/.code={\end{scope}}
+    }
+}
+
+\makeatother
+
+\begin{document}
+Graph of distribution function is:\\
+{\centering
+\begin{tikzpicture}
+\begin{axis}[
+    clip=false,
+    jump mark left,
+    ymin=0,ymax=1,
+    xmin=0, xmax=5,
+    every axis plot/.style={very thick},
+    discontinuous,
+    table/create on use/cumulative distribution/.style={
+        create col/expr={\pgfmathaccuma + \thisrow{f(x)}}   
+    }
+]
+\addplot [black] table [y=cumulative distribution]{
+x f(x)
+0 1/10
+1 1/10
+2 4/15
+3 4/15
+4 4/15
+5 0
+};
+\end{axis}
+\end{tikzpicture}
+\par}
+\end{document}
+
+
+\begin{frame}
+
+\hspace{25mm}
+\Huge Thank You
+\end{frame}
+
+
+\end{document}
